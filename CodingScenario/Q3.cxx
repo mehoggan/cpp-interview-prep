@@ -8,9 +8,10 @@
  * Optional extensions: Give some examples of how to use a BST in an
  * application.
  */
-
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <functional>
 #include <iostream>
 #include <memory>
 

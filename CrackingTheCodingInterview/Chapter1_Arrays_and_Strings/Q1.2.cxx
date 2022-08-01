@@ -3,6 +3,8 @@
  * is a permutation of the other.
  */
 
+#include <algorithm>
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <string>

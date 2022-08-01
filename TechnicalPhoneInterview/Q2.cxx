@@ -3,6 +3,7 @@
  * nickels (5 cents), and pennies (1 cent), find a combination of coins that
  * totals n cents. 
  */
+#include <algorithm>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>

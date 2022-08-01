@@ -15,7 +15,7 @@
  *     dictionary.add("quack"); ==> Not Present
  *     dictionary.add("pen"); ==> Not Present
  */
-
+#include <algorithm>
 #include <array>
 #include <cstdlib>
 #include <iostream>

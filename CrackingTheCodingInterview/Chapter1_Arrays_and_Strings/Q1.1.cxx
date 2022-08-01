@@ -2,6 +2,8 @@
  * characters. What if you cannot use additional data structures.
  */
 
+#include <algorithm>
+#include <cassert>
 #include <ctime>
 #include <chrono>
 #include <cstdlib>

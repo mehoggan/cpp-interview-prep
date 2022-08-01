@@ -2,6 +2,7 @@
  * Q3: Given 2 sorted arrays of ints, implement an algorithm that computes
  *     their intersection (numbers that are in both arrays).
  */
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>

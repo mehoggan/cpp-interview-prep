@@ -6,10 +6,12 @@
  * You are provided the function knows(farmerA, farmerB), which takes two
  * farmers and returns true if farmerA knows farmerB, false otherwise. 
  */
+#include <algorithm>
 #include <cstdlib>
 #include <cstdint>
-#include <list>
 #include <iostream>
+#include <list>
+#include <tuple>
 #include <vector>
 
 struct Relation
