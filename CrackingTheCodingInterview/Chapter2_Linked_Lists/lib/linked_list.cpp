@@ -2,6 +2,9 @@
 
 #include "cpp_utils.hpp"
 
+#include <algorithm>
+#include <cassert>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -11,6 +14,7 @@ LinkedList::Node::Node() :
 
 LinkedList::Node::Node(const std::int64_t val) :
   next_(nullptr),
+  prev_(nullptr),
   val_(val)
 {}
 
@@ -19,9 +23,19 @@ std::shared_ptr<LinkedList::Node> &LinkedList::Node::next()
   return next_;
 }
 
+std::shared_ptr<LinkedList::Node> &LinkedList::Node::prev()
+{
+  return prev_;
+}
+
 const std::shared_ptr<LinkedList::Node> &LinkedList::Node::cnext() const
 {
   return next_;
+}
+
+const std::shared_ptr<LinkedList::Node> &LinkedList::Node::cprev() const
+{
+  return prev_;
 }
 
 void LinkedList::Node::set_next(const std::shared_ptr<Node> &next)
@@ -29,92 +43,110 @@ void LinkedList::Node::set_next(const std::shared_ptr<Node> &next)
   next_ = next;
 }
 
+void LinkedList::Node::set_prev(const std::shared_ptr<Node> &prev)
+{
+  prev_ = prev;
+}
+
 std::int64_t LinkedList::Node::val() const
 {
   return val_;
 }
 
-LinkedList::Iterator::Iterator(const Node &data) :
+LinkedList::ForwardIterator::ForwardIterator(const Node &data) :
   node_(std::make_shared<Node>(data.val()))
 {}
 
-LinkedList::Iterator::Iterator(void *) :
+LinkedList::ForwardIterator::ForwardIterator(void *) :
   node_(nullptr)
 {}
 
-LinkedList::Iterator::Iterator(std::shared_ptr<Node> &node) :
+LinkedList::ForwardIterator::ForwardIterator(std::shared_ptr<Node> &node) :
   node_(node)
 {}
 
-std::shared_ptr<LinkedList::Node> &LinkedList::Iterator::operator->()
+std::shared_ptr<LinkedList::Node> &LinkedList::ForwardIterator::operator->()
 {
   return node_;
 }
 
-LinkedList::Iterator::Iterator(Iterator &&other) noexcept :
+LinkedList::ForwardIterator::ForwardIterator(
+  ForwardIterator &&other) noexcept :
   node_(std::move(other.node_))
 {}
 
-LinkedList::Iterator &LinkedList::Iterator::operator=(Iterator &&rhs) noexcept
+LinkedList::ForwardIterator &LinkedList::ForwardIterator::operator=(
+  ForwardIterator &&rhs) noexcept
 {
   node_ = rhs.node_;
   return (*this);
 }
 
-bool LinkedList::Iterator::operator==(const Iterator &rhs) const
+bool LinkedList::ForwardIterator::operator==(const ForwardIterator &rhs) const
 {
   return node_.get() == rhs.node_.get();
 }
 
-bool LinkedList::Iterator::operator!=(const Iterator &rhs) const
+bool LinkedList::ForwardIterator::operator!=(const ForwardIterator &rhs) const
 {
   return node_.get() != rhs.node_.get();
 }
 
-bool LinkedList::Iterator::operator==(Iterator &rhs)
+bool LinkedList::ForwardIterator::operator==(ForwardIterator &rhs)
 {
   return node_.get() == rhs.node_.get();
 }
 
-bool LinkedList::Iterator::operator!=(Iterator &rhs)
+bool LinkedList::ForwardIterator::operator!=(ForwardIterator &rhs)
 {
   return node_.get() != rhs.node_.get();
 }
 
-bool LinkedList::Iterator::operator==(void *obj) const
+bool LinkedList::ForwardIterator::operator==(void *obj) const
 {
   return node_.get() == obj;
 }
 
-bool LinkedList::Iterator::operator!=(void *obj) const
+bool LinkedList::ForwardIterator::operator!=(void *obj) const
 {
   return node_.get() != obj;
 }
 
-std::int64_t LinkedList::Iterator::operator*()
+std::int64_t LinkedList::ForwardIterator::operator*()
 {
   return node_->val();
 }
 
-LinkedList::Iterator::operator bool() const
+LinkedList::ForwardIterator::operator bool() const
 {
   return node_ != nullptr;
 }
 
-LinkedList::Iterator &LinkedList::Iterator::operator++()
+LinkedList::ForwardIterator &LinkedList::ForwardIterator::operator++()
 {
   node_ = node_->next();
   return (*this);
 }
 
-std::ostream &operator<<(std::ostream &out, const LinkedList::Iterator &obj)
+std::ostream &operator<<(
+  std::ostream &out,
+  const LinkedList::ForwardIterator &obj)
 {
   if (obj.node_ != nullptr) {
-    out << const_cast<LinkedList::Iterator &>(obj)->val();
+    out << const_cast<LinkedList::ForwardIterator &>(obj)->val();
   } else {
     out << "null";
   }
   return out;
+}
+  
+LinkedList::LinkedList(const std::vector<std::int64_t> &vals)
+{
+  std::for_each(vals.begin(), vals.end(),
+    [&](const std::int64_t &val)
+    {
+      insert(val);
+    });
 }
 
 LinkedList::LinkedList(const LinkedList &other)
@@ -133,42 +165,44 @@ LinkedList &LinkedList::operator=(const LinkedList &rhs)
 LinkedList::LinkedList(LinkedList &&other) noexcept
 {
   UNUSED(other);
-  throw std::logic_error(__FUNCTION__ + std::string(" not implemented."));
 }
 
 
 LinkedList &LinkedList::operator=(LinkedList &&rhs) noexcept
 {
   UNUSED(rhs);
-  throw std::logic_error(__FUNCTION__ + std::string(" not implemented."));
   return (*this);
 }
 
-LinkedList::Iterator LinkedList::insert(std::int64_t val)
+LinkedList::ForwardIterator LinkedList::insert(std::int64_t val)
 {
-  Iterator ret;
+  ForwardIterator ret;
   if (not begin()) {
-    begin_ = Iterator(Node(val));
+    begin_ = ForwardIterator(Node(val));
     begin_->set_next(nullptr);
+    begin_->set_prev(nullptr);
     ret = begin_;
   } else {
     ret = begin_;
+    ForwardIterator prev = begin_;
     while (ret->next() != nullptr) {
+      prev = ret;
       ++ret;
     }
     ret.node_->next() = std::make_shared<Node>(val);
-    ++ret;
+    prev = ret;
+    ++ret; // We always stop at most one before the end.
+    ret.node_->prev() = prev.node_;
   }
-
   return ret;
 }
 
-LinkedList::Iterator LinkedList::remove(const std::int64_t val)
+LinkedList::ForwardIterator LinkedList::remove(const std::int64_t val)
 {
-  Iterator it = begin();
+  ForwardIterator it = begin();
   if (begin()) {
     if (it->val() == val) {
-      begin_ = Iterator(begin_->next());
+      begin_ = ForwardIterator(begin_->next());
       it = begin_;
     } else {
       for (; it != end(); ++it) {
@@ -177,7 +211,7 @@ LinkedList::Iterator LinkedList::remove(const std::int64_t val)
         }
       }
       if (it != end()) {
-        Iterator next = Iterator(it->next());
+        ForwardIterator next = ForwardIterator(it->next());
         it->set_next(next->next());
       }
     }
@@ -185,22 +219,46 @@ LinkedList::Iterator LinkedList::remove(const std::int64_t val)
   return it;
 }
 
-LinkedList::Iterator &LinkedList::begin()
+LinkedList::ForwardIterator LinkedList::remove(ForwardIterator &iterator)
+{
+  if (iterator && iterator != begin()) {
+    ForwardIterator prev = ForwardIterator(iterator->prev());
+    prev->set_next(iterator->next());
+    iterator = ForwardIterator(prev->next());
+  } else if (iterator && iterator == begin()) {
+    iterator = remove(begin()->val());
+  }
+  return iterator;
+}
+
+LinkedList::ForwardIterator LinkedList::find(std::int64_t val) const
+{
+  ForwardIterator ret = cbegin();
+  while (ret) {
+    if (ret->val() == val) {
+      break;
+    }
+    ++ret;
+  }
+  return ret;
+}
+
+LinkedList::ForwardIterator &LinkedList::begin()
 {
   return begin_;
 }
 
-LinkedList::Iterator &LinkedList::end()
+LinkedList::ForwardIterator &LinkedList::end()
 {
   return end_;
 }
 
-const LinkedList::Iterator &LinkedList::cbegin() const
+const LinkedList::ForwardIterator &LinkedList::cbegin() const
 {
   return begin_;
 }
 
-const LinkedList::Iterator &LinkedList::cend() const
+const LinkedList::ForwardIterator &LinkedList::cend() const
 {
   return end_;
 }
@@ -210,7 +268,7 @@ std::ostream &operator<<(std::ostream &out, const LinkedList &obj)
   out << "list = ";
   if (obj.cbegin()) {
     out << "[";
-    LinkedList::Iterator it = obj.cbegin();
+    LinkedList::ForwardIterator it = obj.cbegin();
     while (it) {
       out << it;
       if (it->cnext()) {
