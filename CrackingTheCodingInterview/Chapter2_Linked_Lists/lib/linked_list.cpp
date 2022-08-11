@@ -149,28 +149,44 @@ LinkedList::LinkedList(const std::vector<std::int64_t> &vals)
     });
 }
 
+LinkedList::~LinkedList()
+{
+  clear();
+}
+
 LinkedList::LinkedList(const LinkedList &other)
 {
-  UNUSED(other);
-  throw std::logic_error(__FUNCTION__ + std::string(" not implemented."));
+  clear();
+  for (ForwardIterator it = other.cbegin(); it != other.cend(); ++it) {
+    insert(it->val());
+  }
 }
 
 LinkedList &LinkedList::operator=(const LinkedList &rhs)
 {
-  UNUSED(rhs);
-  throw std::logic_error(__FUNCTION__ + std::string(" not implemented."));
+  clear();
+  for (ForwardIterator it = rhs.cbegin(); it != rhs.cend(); ++it) {
+    insert(it->val());
+  }
   return (*this);
 }
 
 LinkedList::LinkedList(LinkedList &&other) noexcept
 {
-  UNUSED(other);
+  clear();
+  for (ForwardIterator it = other.cbegin(); it != other.cend(); ++it) {
+    insert(it->val());
+  }
+  other.clear();
 }
-
 
 LinkedList &LinkedList::operator=(LinkedList &&rhs) noexcept
 {
-  UNUSED(rhs);
+  clear();
+  for (ForwardIterator it = rhs.cbegin(); it != rhs.cend(); ++it) {
+    insert(it->val());
+  }
+  rhs.clear();
   return (*this);
 }
 
@@ -241,6 +257,15 @@ LinkedList::ForwardIterator LinkedList::find(std::int64_t val) const
     ++ret;
   }
   return ret;
+}
+
+void LinkedList::clear()
+{
+  while (begin()) {
+    begin().node_.reset();
+    begin_ = remove(begin());
+  }
+  begin_.node_.reset();
 }
 
 LinkedList::ForwardIterator &LinkedList::begin()

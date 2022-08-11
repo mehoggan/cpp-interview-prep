@@ -9,6 +9,7 @@
 #include <unordered_set>
 
 #include "./include/linked_list.h"
+#include "cpp_utils.hpp"
 
 LinkedList::ForwardIterator insert_into_list_and_print(
   LinkedList &list, const std::int64_t val)
@@ -56,9 +57,30 @@ void remove_duplicates(LinkedList &list)
   std::cout << list << std::endl;
 }
 
+void remove_duplicates_no_buffer(LinkedList &list)
+{ // Note this is O(N^2) optimally we do a N lg N sort and remove dups.
+  for (LinkedList::ForwardIterator it = list.begin();
+    it != list.end();
+    ++it) {
+    for (LinkedList::ForwardIterator next = it;
+      next != list.end();
+      /* In loop */) {
+      if (next != it && (*next) == (*it)) {
+        std::cout << "Found a duplicate of " << (*next) << std::endl;
+        next =  list.remove(next);
+      } else {
+        ++next;
+      }
+    }
+  }
+  std::cout << list << std::endl;
+}
+
 int main(int, char *[])
 {
   LinkedList list({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
   remove_duplicates(list);
+  list = LinkedList({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
+  remove_duplicates_no_buffer(list);
   return EXIT_SUCCESS;
 }

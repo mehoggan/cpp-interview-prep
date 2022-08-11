@@ -78,7 +78,7 @@ public:
 public:
   LinkedList() = default;
 
-  ~LinkedList() = default;
+  ~LinkedList();
 
   LinkedList(const std::vector<std::int64_t> &vals);
 
@@ -97,6 +97,8 @@ public:
   ForwardIterator remove(std::int64_t val);
 
   ForwardIterator find(std::int64_t val) const;
+
+  void clear();
 
   ForwardIterator &begin();
 
