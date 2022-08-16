@@ -139,8 +139,14 @@ std::ostream &operator<<(
   }
   return out;
 }
+
+
+LinkedList::LinkedList() :
+  length_(0)
+{}
   
-LinkedList::LinkedList(const std::vector<std::int64_t> &vals)
+LinkedList::LinkedList(const std::vector<std::int64_t> &vals) :
+  length_(0)
 {
   std::for_each(vals.begin(), vals.end(),
     [&](const std::int64_t &val)
@@ -210,6 +216,7 @@ LinkedList::ForwardIterator LinkedList::insert(std::int64_t val)
     ++ret; // We always stop at most one before the end.
     ret.node_->prev() = prev.node_;
   }
+  ++length_;
   return ret;
 }
 
@@ -232,6 +239,7 @@ LinkedList::ForwardIterator LinkedList::remove(const std::int64_t val)
       }
     }
   }
+  --length_;
   return it;
 }
 
@@ -244,6 +252,7 @@ LinkedList::ForwardIterator LinkedList::remove(ForwardIterator &iterator)
   } else if (iterator && iterator == begin()) {
     iterator = remove(begin()->val());
   }
+  --length_;
   return iterator;
 }
 
@@ -266,6 +275,11 @@ void LinkedList::clear()
     begin_ = remove(begin());
   }
   begin_.node_.reset();
+}
+
+std::size_t LinkedList::length() const
+{
+  return length_;
 }
 
 LinkedList::ForwardIterator &LinkedList::begin()

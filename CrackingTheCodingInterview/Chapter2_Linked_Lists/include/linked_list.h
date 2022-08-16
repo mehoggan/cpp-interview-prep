@@ -76,7 +76,7 @@ public:
   };
 
 public:
-  LinkedList() = default;
+  LinkedList();
 
   ~LinkedList();
 
@@ -100,6 +100,8 @@ public:
 
   void clear();
 
+  [[nodiscard]] std::size_t length() const;
+
   ForwardIterator &begin();
 
   ForwardIterator &end();
@@ -111,6 +113,7 @@ public:
 private:
   ForwardIterator begin_;
   ForwardIterator end_;
+  std::size_t length_;
 };
 
 std::ostream &operator<<(std::ostream &out, const LinkedList &obj);
