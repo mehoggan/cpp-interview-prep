@@ -23,9 +23,9 @@ struct Node
   std::shared_ptr<Node> left_;
   std::shared_ptr<Node> right_;
 
-  bool is_valid() const;
-  bool is_left_valid() const;
-  bool is_right_valid() const;
+  [[nodiscard]] bool is_valid() const;
+  [[nodiscard]] bool is_left_valid() const;
+  [[nodiscard]] bool is_right_valid() const;
 
   explicit Node(std::int64_t val);
 };
@@ -56,7 +56,7 @@ public:
 
   void insert(int64_t val);
 
-  bool is_valid() const;
+  [[nodiscard]] bool is_valid() const;
 
   friend std::ostream &operator<<(std::ostream &out, const BST &bst);
 };

@@ -1,7 +1,7 @@
 /*
  * URLify: Write a method to replace all spaces in a string with ‘%20’. You may
  * assume that the string has sufficient space at the end to hold the 
- * additional characters, and the you are given the “true” length of the 
+ * additional characters, and you are given the “true” length of the
  * string. Please use a character array so that you can perform this operation
  * in place.
  */

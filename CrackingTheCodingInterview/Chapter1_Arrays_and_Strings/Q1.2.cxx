@@ -5,13 +5,12 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <unordered_set>
 #include <vector>
 
-bool is_permutation_of_eachother_hash(
+bool is_permutation_of_each_other_hash(
   const std::string &str_1,
   const std::string &str_2)
 {
@@ -28,7 +27,7 @@ bool is_permutation_of_eachother_hash(
   return ret;
 }
 
-bool is_permutation_of_eachother(
+bool is_permutation_of_each_other(
   const std::string &str_1,
   const std::string &str_2)
 {
@@ -50,10 +49,10 @@ bool is_permutation_of_eachother(
 
 int main(int, char *[])
 {
-  assert(is_permutation_of_eachother("cat", "tac") == true);
-  assert(is_permutation_of_eachother("cat", "tag") == false);
+  assert(is_permutation_of_each_other("cat", "tac") == true);
+  assert(is_permutation_of_each_other("cat", "tag") == false);
 
-  assert(is_permutation_of_eachother_hash("cat", "tac") == true);
-  assert(is_permutation_of_eachother_hash("cat", "tag") == false);
+  assert(is_permutation_of_each_other_hash("cat", "tac") == true);
+  assert(is_permutation_of_each_other_hash("cat", "tag") == false);
   return EXIT_SUCCESS; 
 }  

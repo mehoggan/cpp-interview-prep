@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstdlib>
-#include <exception>
 #include <iostream>
 #include <iterator>
 #include <set>
@@ -16,7 +15,6 @@
 struct Crop
 {
   Crop() :
-    name_(""),
     yield_(0)
   {}
 
@@ -42,7 +40,7 @@ struct Farm
     crops_(crops)
   {};
 
-  bool contains_crop(const std::string &name) const
+  [[nodiscard]] bool contains_crop(const std::string &name) const
   {
     std::vector<Crop>::const_iterator it = std::find_if(
       crops_.cbegin(),
@@ -130,48 +128,48 @@ void make_farms(std::vector<Farm> &farms)
     Crop("corn", 100),
     Crop("soybeans", 70)
   };
-  farms.push_back(Farm("adams", adams_crops));
+  farms.emplace_back("adams", adams_crops);
   std::vector<Crop> adair_crops {
     Crop("soybeans", 50),
     Crop("wheat", 206),
     Crop("coffee", 36)
   };
-  farms.push_back(Farm("adair", adair_crops));
+  farms.emplace_back("adair", adair_crops);
   std::vector<Crop> benton_crops {
     Crop("soybeans", 90)
   };
-  farms.push_back(Farm("benton", benton_crops));
+  farms.emplace_back("benton", benton_crops);
   std::vector<Crop> boone_crops {
     Crop("corn", 75),
     Crop("coffee", 39)
   };
-  farms.push_back(Farm("boone", boone_crops));
+  farms.emplace_back("boone", boone_crops);
   std::vector<Crop> carroll_crops {
     Crop("wheat", 200)
   };
-  farms.push_back(Farm("carroll", carroll_crops));
+  farms.emplace_back("carroll", carroll_crops);
   std::vector<Crop> creation_crops {
     Crop("corn", 90),
     Crop("coffee", 40)
   };
-  farms.push_back(Farm("creation", creation_crops));
+  farms.emplace_back("creation", creation_crops);
   std::vector<Crop> dansplot_crops {
     Crop("soybeans", 55)
   };
-  farms.push_back(Farm("dansplot", dansplot_crops));
+  farms.emplace_back("dansplot", dansplot_crops);
   std::vector<Crop> edgars_crops {
     Crop("soybeans", 95)
   };
-  farms.push_back(Farm("edgars", edgars_crops));
+  farms.emplace_back("edgars", edgars_crops);
   std::vector<Crop> everlast_crops {
     Crop("corn", 70),
     Crop("coffee", 8)
   };
-  farms.push_back(Farm("everlast", everlast_crops));
+  farms.emplace_back("everlast", everlast_crops);
   std::vector<Crop> greenacres_crops {
     Crop("wheat", 205)
   };
-  farms.push_back(Farm("greenacres", greenacres_crops));
+  farms.emplace_back("greenacres", greenacres_crops);
 }
 
 int main(int, char *[])

@@ -5,7 +5,6 @@
  * zero edits) away.
  */
 
-#include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>

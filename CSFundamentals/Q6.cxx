@@ -110,13 +110,20 @@ public:
     desired_size_(desired_size)
   {}
 
-  const ValueStore_t &vals() const { return vals_; }
-  std::size_t current_index() const { return current_index_; }
-  std::size_t desired_size() const { return desired_size_; }
+  [[nodiscard]] const ValueStore_t &vals() const { return vals_; }
+  [[nodiscard]] inline std::size_t current_index() const
+  {
+    return current_index_;
+  }
+  [[nodiscard]] inline std::size_t desired_size() const
+  {
+    return desired_size_;
+  }
 
   void set_current_index(const std::size_t index) { current_index_ = index; }
 
-  bool should_process(const std::array<std::int64_t, ARRAY_SIZE> &array)
+  [[nodiscard]] bool should_process(
+    const std::array<std::int64_t, ARRAY_SIZE> &array) const
   {
     return desired_size_ < array.size();
   }

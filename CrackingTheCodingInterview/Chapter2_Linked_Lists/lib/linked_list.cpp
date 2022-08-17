@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <cassert>
 #include <memory>
-#include <stdexcept>
-#include <string>
 
 LinkedList::Node::Node() :
   next_(nullptr)
@@ -160,11 +158,12 @@ LinkedList::~LinkedList()
   clear();
 }
 
-LinkedList::LinkedList(const LinkedList &other)
+LinkedList::LinkedList(const LinkedList &other) :
+  length_(0)
 {
   clear();
   for (ForwardIterator it = other.cbegin(); it != other.cend(); ++it) {
-    insert(it->val());
+    insert(it->val()); // Insert will increment the length member variable.
   }
 }
 
@@ -177,7 +176,8 @@ LinkedList &LinkedList::operator=(const LinkedList &rhs)
   return (*this);
 }
 
-LinkedList::LinkedList(LinkedList &&other) noexcept
+LinkedList::LinkedList(LinkedList &&other) noexcept :
+  length_(0)
 {
   clear();
   for (ForwardIterator it = other.cbegin(); it != other.cend(); ++it) {
@@ -206,9 +206,15 @@ LinkedList::ForwardIterator LinkedList::insert(std::int64_t val)
     ret = begin_;
   } else {
     ret = begin_;
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnusedValue"
     ForwardIterator prev = begin_;
+#pragma clang diagnostic pop
     while (ret->next() != nullptr) {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnusedValue"
       prev = ret;
+#pragma clang diagnostic pop
       ++ret;
     }
     ret.node_->next() = std::make_shared<Node>(val);

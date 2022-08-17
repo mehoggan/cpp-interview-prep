@@ -6,13 +6,11 @@
 
 #include <array>
 #include <cassert>
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
-#include <vector>
 
 #include "cpp_utils.hpp"
 

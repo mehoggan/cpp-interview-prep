@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <unordered_set>

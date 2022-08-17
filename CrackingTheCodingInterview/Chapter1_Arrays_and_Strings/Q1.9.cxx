@@ -1,11 +1,10 @@
 /*
  * Q1.9 String Rotation: Assume you have a method `isSubstring` which checks if
  * one word is a substring of another. Given two strings, s1 and s2, write code
- * to check if s2 is a rotation of s1 usings only one call to `isSubstring`
+ * to check if s2 is a rotation of s1 using only one call to `isSubstring`
  * (e.g. "waterbottle" is a rotation of "erbottlewat".
  */
 
-#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
@@ -26,8 +25,8 @@ public:
   ReturnStatus(bool ret, const std::string &message);
   ReturnStatus(const ReturnStatus &other);
   ReturnStatus &operator=(const ReturnStatus &other);
-  inline bool ret() const { return ret_; }
-  inline const std::string &message() const { return message_; }
+  [[nodiscard]] inline bool ret() const { return ret_; }
+  [[nodiscard]] inline const std::string &message() const { return message_; }
 };
 
 ReturnStatus::ReturnStatus() :
@@ -79,7 +78,7 @@ ReturnStatus is_rotation(const std::string &s1, const std::string &s2)
   if (s1.empty() && s2.empty()) {
     ret = ReturnStatus {
       true,
-      "SUCCESS: Two empty strings are always rotations of eachother."
+      "SUCCESS: Two empty strings are always rotations of each other."
     };
   } else if (s1.size() == s2.size()) {
     const char first_char = s1[0];

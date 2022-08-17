@@ -19,8 +19,8 @@ void compress(const std::string &input, std::string &output)
   output.clear();
   output.resize(input.size());
   std::size_t write_index = 0;
-  bool outter_break = false;
-  for (std::size_t index = 0ull; index < input.size() && not outter_break;) {
+  bool outer_break = false;
+  for (std::size_t index = 0ull; index < input.size() && not outer_break;) {
     std::size_t letter_count = 1;
     const char curr_letter = input[index];
     while (input[++index] == curr_letter) {
@@ -32,7 +32,7 @@ void compress(const std::string &input, std::string &output)
       if (write_index >= output.size()) {
         std::cerr << "Compression would have no effect." << std::endl;
         output = input;
-        outter_break = true;
+        outer_break = true;
         break;
       }
     }

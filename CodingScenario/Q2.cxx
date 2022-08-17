@@ -166,10 +166,9 @@ bool Game::should_go_right(
   const std::int64_t col,
   const char next_letter)
 {
-  bool ret = false;
   auto u_row = static_cast<std::size_t>(row);
   auto u_col = static_cast<std::size_t>(col);
-  ret = u_col + 1 < Game::table_.size() &&
+  bool ret = u_col + 1 < Game::table_.size() &&
     next_letter == Game::table_[u_row][u_col + 1];
   return ret;
 }
@@ -179,10 +178,9 @@ bool Game::should_go_up(
   const std::int64_t col,
   const char next_letter)
 {
-  bool ret = false;
   auto u_row = static_cast<std::size_t>(row);
   auto u_col = static_cast<std::size_t>(col);
-  ret = row - 1 >= 0 &&
+  bool ret = row - 1 >= 0 &&
     next_letter == Game::table_[u_row - 1][u_col];
   return ret;
 }
@@ -192,10 +190,9 @@ bool Game::should_go_left(
   const std::int64_t col,
   const char next_letter)
 {
-  bool ret = false;
   auto u_row = static_cast<std::size_t>(row);
   auto u_col = static_cast<std::size_t>(col);
-  ret = col - 1 >= 0 && next_letter == Game::table_[u_row][u_col - 1];
+  bool ret = col - 1 >= 0 && next_letter == Game::table_[u_row][u_col - 1];
   return ret;
 }
 
@@ -204,10 +201,9 @@ bool Game::should_go_down(
   const std::int64_t col,
   const char next_letter)
 {
-  bool ret = false;
   auto u_row = static_cast<std::size_t>(row);
   auto u_col = static_cast<std::size_t>(col);
-  ret = u_row + 1 < Game::table_.size() &&
+  bool ret = u_row + 1 < Game::table_.size() &&
     next_letter == Game::table_[u_row + 1][u_col];
   return ret;
 }

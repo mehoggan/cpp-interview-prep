@@ -8,7 +8,6 @@
  */
 #include <algorithm>
 #include <cstdlib>
-#include <cstdint>
 #include <iostream>
 #include <list>
 #include <tuple>
@@ -39,15 +38,12 @@ void populate_relations()
 bool knows(const std::size_t &farmer_0, const std::size_t &farmer_1)
 {
   const std::size_t index = farmer_0 - 1;
-
   return std::find_if(relations[index].knows_.begin(),
     relations[index].knows_.end(),
     [&](const std::size_t &other)
     {
       return other == farmer_1;
     }) != relations[index].knows_.end();
-
-  return true;
 }
 
 void print_celebrity_farmer(const std::vector<KnowsKnown_t> &relations_counts)
