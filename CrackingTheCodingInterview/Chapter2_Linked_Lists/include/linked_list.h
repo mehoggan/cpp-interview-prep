@@ -98,6 +98,8 @@ public:
 
   ForwardIterator find(std::int64_t val) const;
 
+  void find_all(std::int64_t val, std::vector<ForwardIterator> &out) const;
+
   void clear();
 
   [[nodiscard]] std::size_t length() const;

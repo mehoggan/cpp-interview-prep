@@ -268,6 +268,21 @@ LinkedList::ForwardIterator LinkedList::find(std::int64_t val) const
   return ret;
 }
 
+void LinkedList::find_all(
+  std::int64_t val,
+  std::vector<ForwardIterator> &out) const
+{
+  ForwardIterator it = cbegin();
+  out.clear();
+  out.reserve(length());
+  while (it) {
+    if (it->val() == val) {
+      out.push_back(it);
+    }
+    ++it;
+  }
+}
+
 void LinkedList::clear()
 {
   while (begin()) {
