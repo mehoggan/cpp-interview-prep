@@ -8,37 +8,37 @@
 #include <iostream>
 #include <unordered_set>
 
-#include "./include/linked_list.h"
+#include "./include/linked_int_list.h"
 #include "cpp_utils.hpp"
 
-LinkedList::ForwardIterator insert_into_list_and_print(
-  LinkedList &list, const std::int64_t val)
+LinkedIntList::ForwardIterator insert_into_list_and_print(
+  LinkedIntList &list, const std::int64_t val)
 {
-  LinkedList::ForwardIterator ret = list.insert(val);
+  LinkedIntList::ForwardIterator ret = list.insert(val);
   std::cout << list << std::endl;
   std::cout.flush();
   return ret;
 }
 
-LinkedList::ForwardIterator remove_from_list_and_print(
-  LinkedList &list, const std::int64_t val)
+LinkedIntList::ForwardIterator remove_from_list_and_print(
+  LinkedIntList &list, const std::int64_t val)
 {
-  LinkedList::ForwardIterator ret = list.remove(val);
+  LinkedIntList::ForwardIterator ret = list.remove(val);
   std::cout << list << std::endl;
   std::cout.flush();
   return ret;
 }
 
-LinkedList::ForwardIterator remove_from_list_and_print(
-  LinkedList &list, LinkedList::ForwardIterator &iterator)
+LinkedIntList::ForwardIterator remove_from_list_and_print(
+  LinkedIntList &list, LinkedIntList::ForwardIterator &iterator)
 {
-  LinkedList::ForwardIterator ret = list.remove(iterator);
+  LinkedIntList::ForwardIterator ret = list.remove(iterator);
   std::cout << list << std::endl;
   std::cout.flush();
   return ret;
 }
 
-void remove_duplicates(LinkedList &list)
+void remove_duplicates(LinkedIntList &list)
 {
   std::size_t index = 0;
   std::unordered_set<std::int64_t> hash_table;
@@ -57,12 +57,12 @@ void remove_duplicates(LinkedList &list)
   std::cout << list << std::endl;
 }
 
-void remove_duplicates_no_buffer(LinkedList &list)
+void remove_duplicates_no_buffer(LinkedIntList &list)
 { // Note this is O(N^2) optimally we do a N lg N sort and remove dups.
-  for (LinkedList::ForwardIterator it = list.begin();
+  for (LinkedIntList::ForwardIterator it = list.begin();
     it != list.end();
     ++it) {
-    for (LinkedList::ForwardIterator next = it;
+    for (LinkedIntList::ForwardIterator next = it;
       next != list.end();
       /* In loop */) {
       if (next != it && (*next) == (*it)) {
@@ -78,9 +78,9 @@ void remove_duplicates_no_buffer(LinkedList &list)
 
 int main(int, char *[])
 {
-  LinkedList list({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
+  LinkedIntList list({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
   remove_duplicates(list);
-  list = LinkedList({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
+  list = LinkedIntList({2, 0, 1, 2, 3, 4, 1, 5, 6, 7, 8, 9, 6});
   remove_duplicates_no_buffer(list);
   return EXIT_SUCCESS;
 }

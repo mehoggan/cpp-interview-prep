@@ -1,19 +1,19 @@
-#ifndef CPP_INTERVIEW_PREP_CRACKING_THE_CODING_INTERVIEW_CH_2_LINKED_LISTS_H
-#define CPP_INTERVIEW_PREP_CRACKING_THE_CODING_INTERVIEW_CH_2_LINKED_LISTS_H
+#ifndef CPP_INTERVIEW_PREP_CRACKINGTHECODINGINTERVIEW_CH_2_LINKED_CHAR_LISTS_H
+#define CPP_INTERVIEW_PREP_CRACKINGTHECODINGINTERVIEW_CH_2_LINKED_CHAR_LISTS_H
 
 #include <cstdint>
 #include <iostream>
 #include <memory>
 #include <vector>
 
-class LinkedList
+class LinkedCharList
 {
 private:
   class Node
   {
   public:
     Node();
-    explicit Node(std::int64_t val);
+    explicit Node(char val);
 
     Node(const Node &other) = default;
     Node &operator=(const Node &rhs) = default;
@@ -25,19 +25,19 @@ private:
     void set_next(const std::shared_ptr<Node> &next);
     void set_prev(const std::shared_ptr<Node> &prev);
 
-    [[nodiscard]] std::int64_t val() const;
+    [[nodiscard]] char val() const;
 
   private:
     std::shared_ptr<Node> next_;
     std::shared_ptr<Node> prev_;
-    std::int64_t val_{};
+    char val_{};
   };
 
 public:
   class ForwardIterator
   {
   private:
-    friend class LinkedList;
+    friend class LinkedCharList;
     explicit ForwardIterator(const Node &data);
     explicit ForwardIterator(void *);
     explicit ForwardIterator(std::shared_ptr<Node> &node);
@@ -60,7 +60,7 @@ public:
     bool operator==(ForwardIterator &rhs);
     bool operator!=(ForwardIterator &rhs);
 
-    std::int64_t operator*();
+    char operator*();
 
     explicit operator bool() const;
 
@@ -69,36 +69,36 @@ public:
     friend
     std::ostream &operator<<(std::ostream &out, const ForwardIterator &obj);
     friend
-    std::ostream &operator<<(std::ostream &out, const LinkedList &obj);
+    std::ostream &operator<<(std::ostream &out, const LinkedCharList &obj);
 
   private:
     std::shared_ptr<Node> node_;
   };
 
 public:
-  LinkedList();
+  LinkedCharList();
 
-  ~LinkedList();
+  ~LinkedCharList();
 
-  LinkedList(const std::vector<std::int64_t> &vals);
+  LinkedCharList(const std::vector<char> &vals);
 
-  LinkedList(const LinkedList &other);
+  LinkedCharList(const LinkedCharList &other);
 
-  LinkedList &operator=(const LinkedList &rhs);
+  LinkedCharList &operator=(const LinkedCharList &rhs);
 
-  LinkedList(LinkedList &&other) noexcept;
+  LinkedCharList(LinkedCharList &&other) noexcept;
 
-  LinkedList &operator=(LinkedList &&rhs) noexcept ;
+  LinkedCharList &operator=(LinkedCharList &&rhs) noexcept ;
 
-  ForwardIterator insert(std::int64_t val);
+  ForwardIterator insert(char val);
 
   ForwardIterator remove(ForwardIterator &iterator);
 
-  ForwardIterator remove(std::int64_t val);
+  ForwardIterator remove(char val);
 
-  ForwardIterator find(std::int64_t val) const;
+  ForwardIterator find(char val) const;
 
-  void find_all(std::int64_t val, std::vector<ForwardIterator> &out) const;
+  void find_all(char val, std::vector<ForwardIterator> &out) const;
 
   void clear();
 
@@ -118,6 +118,6 @@ private:
   std::size_t length_;
 };
 
-std::ostream &operator<<(std::ostream &out, const LinkedList &obj);
+std::ostream &operator<<(std::ostream &out, const LinkedCharList &obj);
 
 #endif
