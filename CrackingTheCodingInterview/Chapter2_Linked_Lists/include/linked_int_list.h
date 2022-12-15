@@ -42,6 +42,7 @@ public:
     explicit ForwardIterator(void *);
     explicit ForwardIterator(std::shared_ptr<Node> &node);
     std::shared_ptr<Node> &operator->();
+    std::shared_ptr<Node> get();
 
   public:
     ForwardIterator() = default;
@@ -61,6 +62,8 @@ public:
     bool operator!=(ForwardIterator &rhs);
 
     std::int64_t operator*();
+
+    std::int64_t operator*() const;
 
     explicit operator bool() const;
 
@@ -82,6 +85,9 @@ public:
 
   LinkedIntList(const std::vector<std::int64_t> &vals);
 
+  LinkedIntList(const LinkedIntList::ForwardIterator &begin,
+    const LinkedIntList::ForwardIterator &end);
+
   LinkedIntList(const LinkedIntList &other);
 
   LinkedIntList &operator=(const LinkedIntList &rhs);
@@ -91,6 +97,8 @@ public:
   LinkedIntList &operator=(LinkedIntList &&rhs) noexcept ;
 
   ForwardIterator insert(std::int64_t val);
+
+  void push(std::int64_t val);
 
   ForwardIterator remove(ForwardIterator &iterator);
 

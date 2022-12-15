@@ -69,6 +69,11 @@ LinkedIntList::ForwardIterator::operator->()
   return node_;
 }
 
+std::shared_ptr<LinkedIntList::Node> LinkedIntList::ForwardIterator::get()
+{
+  return node_;
+}
+
 LinkedIntList::ForwardIterator::ForwardIterator(
   ForwardIterator &&other) noexcept :
   node_(std::move(other.node_))
@@ -118,6 +123,12 @@ std::int64_t LinkedIntList::ForwardIterator::operator*()
   return node_->val();
 }
 
+
+std::int64_t LinkedIntList::ForwardIterator::operator*() const
+{
+  return node_->val();
+}
+
 LinkedIntList::ForwardIterator::operator bool() const
 {
   return node_ != nullptr;
@@ -154,6 +165,19 @@ LinkedIntList::LinkedIntList(const std::vector<std::int64_t> &vals) :
     {
       insert(val);
     });
+}
+
+
+LinkedIntList::LinkedIntList(
+  const LinkedIntList::ForwardIterator &begin,
+  const LinkedIntList::ForwardIterator &end) :
+  length_(0)
+{
+  LinkedIntList::ForwardIterator it = begin;
+  while (it != end) {
+    insert(*it);
+    ++it;
+  }
 }
 
 LinkedIntList::~LinkedIntList()
@@ -227,6 +251,21 @@ LinkedIntList::ForwardIterator LinkedIntList::insert(std::int64_t val)
   }
   ++length_;
   return ret;
+}
+
+
+void LinkedIntList::push(std::int64_t val)
+{
+  if (not begin()) {
+    insert(val);
+  } else {
+    auto new_first_node = std::make_shared<Node>(val);
+    ForwardIterator new_first(new_first_node);
+    new_first->set_next(nullptr);
+    new_first->set_prev(nullptr);
+    new_first->set_next(begin_.node_);
+    begin_ = new_first;
+  }
 }
 
 LinkedIntList::ForwardIterator LinkedIntList::remove(const std::int64_t val)
