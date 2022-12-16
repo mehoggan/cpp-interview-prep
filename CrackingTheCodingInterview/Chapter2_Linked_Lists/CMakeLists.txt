@@ -52,3 +52,8 @@ target_link_libraries(Q2.4_CrackingTheCodingInterview LinkedLists)
 #       Output: 9 -> 1 -> 2. That is 912.
 add_executable(Q2.5_CrackingTheCodingInterview Q2.5.cxx)
 target_link_libraries(Q2.5_CrackingTheCodingInterview LinkedLists)
+
+# Q2.6: Palindrome implement a function to check if a linked list is a
+#       palindrome.
+add_executable(Q2.6_CrackingTheCodingInterview Q2.6.cxx)
+target_link_libraries(Q2.6_CrackingTheCodingInterview LinkedLists)

@@ -26,12 +26,14 @@ std::shared_ptr<LinkedIntList::Node> &LinkedIntList::Node::prev()
   return prev_;
 }
 
-const std::shared_ptr<LinkedIntList::Node> &LinkedIntList::Node::cnext() const
+const std::shared_ptr<LinkedIntList::Node> &
+LinkedIntList::Node::cnext() const
 {
   return next_;
 }
 
-const std::shared_ptr<LinkedIntList::Node> &LinkedIntList::Node::cprev() const
+const std::shared_ptr<LinkedIntList::Node> &
+LinkedIntList::Node::cprev() const
 {
   return prev_;
 }
@@ -59,7 +61,8 @@ LinkedIntList::ForwardIterator::ForwardIterator(void *) :
   node_(nullptr)
 {}
 
-LinkedIntList::ForwardIterator::ForwardIterator(std::shared_ptr<Node> &node) :
+LinkedIntList::ForwardIterator::ForwardIterator(
+  std::shared_ptr<Node> &node) :
   node_(node)
 {}
 
@@ -123,7 +126,6 @@ std::int64_t LinkedIntList::ForwardIterator::operator*()
   return node_->val();
 }
 
-
 std::int64_t LinkedIntList::ForwardIterator::operator*() const
 {
   return node_->val();
@@ -152,7 +154,6 @@ std::ostream &operator<<(
   return out;
 }
 
-
 LinkedIntList::LinkedIntList() :
   length_(0)
 {}
@@ -166,7 +167,6 @@ LinkedIntList::LinkedIntList(const std::vector<std::int64_t> &vals) :
       insert(val);
     });
 }
-
 
 LinkedIntList::LinkedIntList(
   const LinkedIntList::ForwardIterator &begin,
@@ -252,7 +252,6 @@ LinkedIntList::ForwardIterator LinkedIntList::insert(std::int64_t val)
   ++length_;
   return ret;
 }
-
 
 void LinkedIntList::push(std::int64_t val)
 {

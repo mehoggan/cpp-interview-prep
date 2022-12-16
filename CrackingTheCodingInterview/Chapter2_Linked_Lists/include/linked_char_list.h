@@ -42,6 +42,7 @@ public:
     explicit ForwardIterator(void *);
     explicit ForwardIterator(std::shared_ptr<Node> &node);
     std::shared_ptr<Node> &operator->();
+    std::shared_ptr<Node> get();
 
   public:
     ForwardIterator() = default;
@@ -62,6 +63,8 @@ public:
 
     char operator*();
 
+    char operator*() const;
+
     explicit operator bool() const;
 
     ForwardIterator &operator++();
@@ -81,6 +84,9 @@ public:
   ~LinkedCharList();
 
   LinkedCharList(const std::vector<char> &vals);
+  
+  LinkedCharList(const LinkedCharList::ForwardIterator &begin,
+    const LinkedCharList::ForwardIterator &end);
 
   LinkedCharList(const LinkedCharList &other);
 
@@ -91,6 +97,8 @@ public:
   LinkedCharList &operator=(LinkedCharList &&rhs) noexcept ;
 
   ForwardIterator insert(char val);
+
+  void push(char val);
 
   ForwardIterator remove(ForwardIterator &iterator);
 

@@ -72,6 +72,11 @@ LinkedCharList::ForwardIterator::operator->()
   return node_;
 }
 
+std::shared_ptr<LinkedCharList::Node> LinkedCharList::ForwardIterator::get()
+{
+  return node_;
+}
+
 LinkedCharList::ForwardIterator::ForwardIterator(
   ForwardIterator &&other) noexcept :
   node_(std::move(other.node_))
@@ -121,6 +126,11 @@ char LinkedCharList::ForwardIterator::operator*()
   return node_->val();
 }
 
+char LinkedCharList::ForwardIterator::operator*() const
+{
+  return node_->val();
+}
+
 LinkedCharList::ForwardIterator::operator bool() const
 {
   return node_ != nullptr;
@@ -144,7 +154,6 @@ std::ostream &operator<<(
   return out;
 }
 
-
 LinkedCharList::LinkedCharList() :
   length_(0)
 {}
@@ -157,6 +166,18 @@ LinkedCharList::LinkedCharList(const std::vector<char> &vals) :
     {
       insert(val);
     });
+}
+
+LinkedCharList::LinkedCharList(
+  const LinkedCharList::ForwardIterator &begin,
+  const LinkedCharList::ForwardIterator &end) :
+  length_(0)
+{
+  LinkedCharList::ForwardIterator it = begin;
+  while (it != end) {
+    insert(*it);
+    ++it;
+  }
 }
 
 LinkedCharList::~LinkedCharList()
@@ -230,6 +251,20 @@ LinkedCharList::ForwardIterator LinkedCharList::insert(char val)
   }
   ++length_;
   return ret;
+}
+
+void LinkedCharList::push(char val)
+{
+  if (not begin()) {
+    insert(val);
+  } else {
+    auto new_first_node = std::make_shared<Node>(val);
+    ForwardIterator new_first(new_first_node);
+    new_first->set_next(nullptr);
+    new_first->set_prev(nullptr);
+    new_first->set_next(begin_.node_);
+    begin_ = new_first;
+  }
 }
 
 LinkedCharList::ForwardIterator LinkedCharList::remove(const char val)
