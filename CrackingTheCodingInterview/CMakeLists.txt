@@ -5,3 +5,5 @@ add_subdirectory("./OneOffs")
 add_subdirectory("./Chapter1_Arrays_and_Strings")
 
 add_subdirectory("./Chapter2_Linked_Lists")
+
+add_subdirectory("./Chapter3_Stacks_and_Queues")
