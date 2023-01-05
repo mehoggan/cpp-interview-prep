@@ -16,6 +16,13 @@
  *   1                  1 0 1 5 3        1
  *  -1                 -3 1 0 1 5 3     -1
  *
+ *  If the stack is empty, insert x into the stack and make minEle equal to x.
+ *  If the stack is not empty, compare x with minEle. Two cases arise:
+ *    If x is greater than or equal to minEle, simply insert x.
+ *    If x is less than minEle, insert (2*x – minEle) into the stack and make
+ *    minEle equal to x. For example, let the previous minEle be 3. Now we want
+ *    to insert 2. We update minEle as 2 and insert 2*2 – 3 = 1 into the stack
+ *
  * Important Points:
  * Stack doesn't hold the actual value of an element if it is minimum so far.
  * The actual minimum element is always stored in the min_elem_ variable.
@@ -29,6 +36,16 @@
  *   1                  2                   5 3                3
  *   5                  5                   3                  3
  *   3                  3                   -                  max()
+ *
+ * Remove the element from the top. Let the removed element be y. Two cases
+ * arise:
+ *   If y is greater than or equal to minEle, the minimum element in the stack
+ *   is still minEle.
+ *   If y is less than minEle, the minimum element now becomes (2*minEle – y),
+ *   so update (minEle = 2*minEle – y). This is where we retrieve the previous
+ *   minimum from the current minimum and its value in the stack. For example,
+ *   let the element to be removed be 1 and minEle be 2. We remove 1 and update
+ *   minEle as 2*2 – 1 = 3
  */
 
 #include <cstdint>
@@ -101,7 +118,7 @@ public:
   {
     push(val);
     std::cout << std::setw(2) << val << "                  ";
-    std::string space(18 - data_structure_.size() * 3 + 3, ' ');
+    std::string space(26 - data_structure_.size() * 3 + 3, ' ');
     std::cout << (*this) << space;
     std::cout << std::setw(2) << min_elem_ << std::endl;
   }
@@ -110,7 +127,7 @@ public:
   {
     std::cout << std::setw(2) << " -                 ";
     std::cout << std::setw(2) << " -";
-    std::string space(17 - data_structure_.size() * 3 + 3, ' ');
+    std::string space(30 - data_structure_.size() * 3 + 3, ' ');
     std::cout << "                  " << (*this) << space;
     std::cout << std::setw(2) << min_elem_ << std::endl;
   }
@@ -121,7 +138,7 @@ public:
     std::cout << std::setw(2) << adjusted << "                 ";
     std::cout << std::setw(2) << top();
     pop();
-    std::string space(17 - data_structure_.size() * 3 + 3, ' ');
+    std::string space(30 - data_structure_.size() * 3 + 3, ' ');
     std::cout << "                  " << (*this) << space;
     std::cout << std::setw(2) << min_elem_ << std::endl;
   }
@@ -146,14 +163,17 @@ private:
 int main(int, char *[])
 {
   StackWithMinTracking stack;
-  std::cout << " Number Inserted  |  Present Stack     |  minEle" <<
+  std::cout << " Number Inserted  |  Present Stack             |  minEle" <<
     std::endl;
-  for (auto i : {3, 5, 2, 1, 1, -1}) {
+  // for (auto i : {3, 5, 2, 1, 1, -1}) {
+  //   stack.do_insert(i);
+  // }
+  for (auto i : {3, 6, 2, 5, 1, 4, 0, 3, -1}) {
     stack.do_insert(i);
   }
   std::cout << std::endl;
   std::cout << " Number Removed  |  Original Number  |  " <<
-    "Present Stack    |  minEle" << std::endl;
+    "Present Stack                 |  minEle" << std::endl;
   stack.do_preremove();
   while (not stack.is_empty()) {
     stack.do_remove();
