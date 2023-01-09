@@ -25,3 +25,7 @@ add_executable(Q3.2_CrackingTheCodingInterview Q3.2.cxx)
 #         Implement a function popAt(int index) which performs a pop operation
 #         an a specific sub-stack.
 add_executable(Q3.3_CrackingTheCodingInterview Q3.3.cxx)
+
+# Q3.4: Queue via Stacks: Implement a MyQueue class which implements a queue
+#       using two stacks.
+add_executable(Q3.4_CrackingTheCodingInterview Q3.4.cxx)
