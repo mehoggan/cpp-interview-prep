@@ -103,51 +103,6 @@ public:
 private:
   typedef std::pair<Animal::Type, Callback_t> Promise_t;
 
-private:
-  void print_this()
-  {
-    //=================================================================
-    std::cout << "BACK: Kenel (" << kenel_.size() << "):" << std::endl;
-    std::cout.flush();
-    std::for_each(kenel_.begin(), kenel_.end(),
-      [](const Animal &animal)
-      {
-        std::cout << std::string(animal) << ", " << std::endl; 
-        std::cout.flush();
-      });
-    std::cout.flush();
-    std::cout << "BACK: Promises (" << fulfillment_callbacks_.size()
-      << "): ";
-    std::cout.flush();
-    std::for_each(
-      fulfillment_callbacks_.begin(), fulfillment_callbacks_.end(),
-      [](const Promise_t &promise)
-      {
-        switch (promise.first) {
-        case Animal::Type::DOG: {
-          std::cout << "Dog";
-          std::cout.flush();
-        }
-          break;
-        case Animal::Type::CAT: {
-          std::cout << "Cat";
-          std::cout.flush();
-        }
-          break;
-        case Animal::Type::NONE: {
-          std::cout << "N/A";
-          std::cout.flush();
-        }
-          break;
-        }
-        std::cout << ", ";
-        std::cout.flush();
-      });
-    std::cout << std::endl;
-    std::cout.flush();
-    //=================================================================
-  }
-
 public:
   AnimalShelter() :
     run_fulfillment_(true)
@@ -155,27 +110,16 @@ public:
     fulfillment_thread_ = std::thread(
       [this]()
       {
-        std::cout << "BACK: Starting up backend..." << std::endl;
-        std::cout.flush();
         while (run_fulfillment_.load()) {
-          std::cout << "BACK: Waiting for fulfillment notification..." <<
-            std::endl;
-          std::cout.flush();
           std::unique_lock<std::mutex> fullfilment_lock(fulfillment_sync_);
           fulfillment_cv_.wait(fullfilment_lock);
           {
             std::scoped_lock<std::mutex> kenel_lock(kenel_sync_);
             {
-              print_this();
               if (not fulfillment_callbacks_.empty()) {
                 auto kenel_front_type = kenel_.front().get_type();
                 auto fulfillment_type = fulfillment_callbacks_.front().first;
-                std::cout << "BACK: Checking if fullfillment can be " <<
-                  "met..." << std::endl;
-                std::cout.flush();
                 if (kenel_front_type  == fulfillment_type) {
-                  std::cout << "BACK: Fulfillment met!!!" << std::endl;
-                  std::cout.flush();
                   fulfillment_callbacks_.front().second(kenel_.front());
                   kenel_.pop_front();
                   fulfillment_callbacks_.pop_front();
@@ -186,8 +130,6 @@ public:
           fullfilment_lock.unlock();
           fulfillment_cv_.notify_one();
         }
-        std::cout << "BACK: Backend shutting down..." << std::endl;
-        std::cout.flush();
       }
     );
 
@@ -196,28 +138,15 @@ public:
 
   ~AnimalShelter()
   {
-    std::cout << "FRONT: Shelter shutting down..." << std::endl;
-    std::cout.flush();
     fulfill_until();
-    std::cout << "FRONT: Done fulfilling!" << std::endl;
-    std::cout.flush();
     kenel_.erase(kenel_.begin(), kenel_.end());
-    std::cout << "FRONT: Removing all callbacks!" << std::endl;
-    std::cout.flush();
     fulfillment_callbacks_.erase(fulfillment_callbacks_.begin(),
       fulfillment_callbacks_.end());
-    std::cout << "FRONT: Notifiying kenel it is okay to shutdown..." <<
-      std::endl;
-    std::cout.flush();
     run_fulfillment_.store(false);
     fulfillment_cv_.notify_all();
-    std::cout << "FRONT: Waiting for backend to shutdown..." << std::endl;
-    std::cout.flush();
     if (fulfillment_thread_.joinable()) {
       fulfillment_thread_.join();
     }
-    std::cout << "FRONT: Goodbye, its closing time!" << std::endl;
-    std::cout.flush();
   }
 
   bool empty() const
@@ -230,8 +159,6 @@ public:
   {
     {
       std::scoped_lock<std::mutex> kenel_lock(kenel_sync_);
-      std::cout << "FRONT: Enqueueing " << std::string(animal) << std::endl;
-      std::cout.flush();
       if (not is_supported(animal)) {
         throw std::runtime_error("Non supported animal brought into shelter!");
       } else if (contains(animal)) {
@@ -249,8 +176,6 @@ public:
   {
     Animal ret;
     {
-      std::cout << "FRONT: Dequeuing..." << std::endl;
-      std::cout.flush();
       std::scoped_lock<std::mutex> kenel_lock(kenel_sync_);
       if (kenel_.empty()) {
         throw std::runtime_error("There are no more animals in the shelter!");
@@ -303,24 +228,16 @@ private:
   void fulfill()
   {
     if (not empty()) {
-      std::cout << "FRONT: Notify fullment thread..." << std::endl;
-      std::cout.flush();
       fulfillment_cv_.notify_one();
-
-      std::cout << "FRONT: Waiting on backend..." << std::endl;
-      std::cout.flush();
       {
         std::unique_lock<std::mutex> fulfillment_lock(fulfillment_sync_);
         fulfillment_cv_.wait(fulfillment_lock);
       }
-      std::cout << "FRONT: Backend finished operation." << std::endl;
-      std::cout.flush();
     }
   }
 
   void fulfill_until()
   {
-    std::cout.flush();
     while (can_fulfill()) {
       fulfill();
     }
@@ -376,38 +293,60 @@ int main(int, char *[])
           << std::string(animal) << std::endl;
         std::cout.flush();
       };
-    shelter.request_animal_type(DOG, callback);
+    shelter.request_animal_type(CAT, callback);
   }
 
-  // {
-  //   std::string name = "Jonny";
-  //   Animal oldest = shelter.dequeue_any();
-  //   std::cout << "FRONT: " << name << " just got a "
-  //     << std::string(oldest) << std::endl;
-  //   std::cout.flush();
-  //   std::cout << shelter << std::endl;
-  //   std::cout.flush();
-  // }
+  {
+    std::string name = "Jonny";
+    Animal oldest = shelter.dequeue_any();
+    std::cout << "FRONT: " << name << " just got a "
+      << std::string(oldest) << std::endl;
+    std::cout.flush();
+    std::cout << shelter << std::endl;
+    std::cout.flush();
+  }
 
-  // {
-  //   std::string name = "Peter";
-  //   Animal oldest = shelter.dequeue_any();
-  //   std::cout << "FRONT: " << name << " just got a "
-  //     << std::string(oldest) << std::endl;
-  //   std::cout.flush();
-  //   std::cout << shelter << std::endl;
-  //   std::cout.flush();
-  // }
+  {
+    std::string name = "Peter";
+    Animal oldest = shelter.dequeue_any();
+    std::cout << "FRONT: " << name << " just got a "
+      << std::string(oldest) << std::endl;
+    std::cout.flush();
+    std::cout << shelter << std::endl;
+    std::cout.flush();
+  }
 
-  // {
-  //   std::string name = "Mark";
-  //   Animal oldest = shelter.dequeue_any();
-  //   std::cout << "FRONT: " << name << " just got a "
-  //     << std::string(oldest) << std::endl;
-  //   std::cout.flush();
-  //   std::cout << shelter << std::endl;
-  //   std::cout.flush();
-  // }
+  {
+    std::string name = "Karen";
+    auto callback = [&name](const Animal &animal)
+      {
+        std::cout << "FRONT: " << name << " just got a "
+          << std::string(animal) << std::endl;
+        std::cout.flush();
+      };
+    shelter.request_animal_type(CAT, callback);
+  }
+
+  {
+    std::string name = "Mark";
+    Animal oldest = shelter.dequeue_any();
+    std::cout << "FRONT: " << name << " just got a "
+      << std::string(oldest) << std::endl;
+    std::cout.flush();
+    std::cout << shelter << std::endl;
+    std::cout.flush();
+  }
+
+  {
+    std::string name = "Larry";
+    auto callback = [&name](const Animal &animal)
+      {
+        std::cout << "FRONT: " << name << " just got a "
+          << std::string(animal) << std::endl;
+        std::cout.flush();
+      };
+    shelter.request_animal_type(DOG, callback);
+  }
 
   return EXIT_SUCCESS;
 }
