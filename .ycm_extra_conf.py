@@ -70,7 +70,8 @@ flags = [
     '-I', '/usr/local/include',
     '-I', os.path.dirname(os.path.abspath(__file__)),
     '-I', '{0}/CodingScenario/CrackingTheCodingInterview/Chapter2_Linked_Lists/include'.format(os.path.dirname(os.path.realpath(__file__))),
-    '-I', '{0}/CodingScenario/CrackingTheCodingInterview/Chapter3_Stacks_and_Queues/include'.format(os.path.dirname(os.path.realpath(__file__)))
+    '-I', '{0}/CodingScenario/CrackingTheCodingInterview/Chapter3_Stacks_and_Queues/include'.format(os.path.dirname(os.path.realpath(__file__))),
+    '-I', '{0}/CodingScenario/CrackingTheCodingInterview/Chapter4_Trees_and_Graphs/include'.format(os.path.dirname(os.path.realpath(__file__)))
 ]
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
