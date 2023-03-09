@@ -21,3 +21,7 @@ add_executable(Q4.3_CrackingTheCodingInterview Q4.3.cxx)
 #       defined to be a tree such that the heights of the two subtrees of
 #       any node never differ by mare than one.
 add_executable(Q4.4_CrackingTheCodingInterview Q4.4.cxx)
+
+# Q4.5: Validate BST: Implement a function to check if a binary tree is a
+#       binary search tree.
+add_executable(Q4.5_CrackingTheCodingInterview Q4.5.cxx)

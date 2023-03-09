@@ -47,7 +47,7 @@ public:
       return std::string(uuid_str);
     }
 
-    [[nodiscard]] const bool visited() const
+    [[nodiscard]] bool visited() const
     {
       return visited_.load();
     }

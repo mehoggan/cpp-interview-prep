@@ -112,7 +112,13 @@ public:
   };
 
 public:
-  BST() = default;
+  BST()
+  {}
+
+  BST(std::unique_ptr<Node> &&root) :
+    root_(std::move(root))
+  {}
+
   ~BST() = default;
   BST(const BST &graph) = default;
   BST &operator=(const BST &graph) = default;
