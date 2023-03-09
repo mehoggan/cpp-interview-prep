@@ -15,3 +15,9 @@ add_executable(Q4.2_CrackingTheCodingInterview Q4.2.cxx)
 #       a linked list of all the nodes at each depth (e.g., If you have a tree
 #       with depth, D you'll have a D linked lists.
 add_executable(Q4.3_CrackingTheCodingInterview Q4.3.cxx)
+
+# Q4.4: Check Balanced: Implement a function to check if a binary tree is
+#       balanced. For the purposes of this question, a balanced tree is
+#       defined to be a tree such that the heights of the two subtrees of
+#       any node never differ by mare than one.
+add_executable(Q4.4_CrackingTheCodingInterview Q4.4.cxx)
