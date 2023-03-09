@@ -78,7 +78,6 @@ public:
       return left_;
     }
 
-
     [[nodiscard]] std::unique_ptr<Node> &mutable_left()
     {
       return left_;
@@ -120,9 +119,18 @@ public:
   BST(BST &&graph) = default;
   BST &operator=(BST &&graph) = default;
 
+  const std::unique_ptr<Node> &get_root() const
+  {
+    return root_;
+  }
+
+  std::unique_ptr<Node> &get_root()
+  {
+    return root_;
+  }
+
   void insert(const T &val)
   {
-    std::cout << "\tInsert called with " << val << std::endl;
     if (root_ == nullptr) {
       root_ = std::make_unique<Node>(val);
     } else {
@@ -172,7 +180,7 @@ public:
               out << "\t";
               ++curr_depth;
             }
-            out << curr_str << std::endl;
+            out << depth << ") " << curr_str << std::endl;
             rec_print(curr->unmutable_left(), depth + 1);
             rec_print(curr->unmutable_right(), depth + 1);
           }

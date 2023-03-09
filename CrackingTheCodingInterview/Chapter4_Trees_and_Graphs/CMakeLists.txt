@@ -10,3 +10,8 @@ add_executable(Q4.1_CrackingTheCodingInterview Q4.1.cxx)
 #       integer elements, write an algorithm to create a binary search tree
 #       with minimal height.
 add_executable(Q4.2_CrackingTheCodingInterview Q4.2.cxx)
+
+# Q4.3: List of Depths: Given a binary tree, design an algorithm which creates
+#       a linked list of all the nodes at each depth (e.g., If you have a tree
+#       with depth, D you'll have a D linked lists.
+add_executable(Q4.3_CrackingTheCodingInterview Q4.3.cxx)
