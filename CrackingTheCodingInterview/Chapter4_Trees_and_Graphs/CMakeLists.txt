@@ -25,3 +25,8 @@ add_executable(Q4.4_CrackingTheCodingInterview Q4.4.cxx)
 # Q4.5: Validate BST: Implement a function to check if a binary tree is a
 #       binary search tree.
 add_executable(Q4.5_CrackingTheCodingInterview Q4.5.cxx)
+
+# Q4.6: Successor: Write an algorithm to find the "next" node (i.e., in-order
+#       successor) of a given node in a binary search tree. You may assume
+#       that each node has a link to its parent.
+add_executable(Q4.6_CrackingTheCodingInterview Q4.6.cxx)

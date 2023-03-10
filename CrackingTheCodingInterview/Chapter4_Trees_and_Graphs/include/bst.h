@@ -169,6 +169,26 @@ public:
     }
   }
 
+  std::size_t height() const
+  {
+    typedef std::unique_ptr<BST<T>::Node> BSTNode_t;
+    std::function<std::size_t (const BSTNode_t &, std::size_t height)>
+      height_rec = [&height_rec](
+      const BSTNode_t &curr,
+      std::size_t height) -> std::size_t
+      {
+        if (curr) {
+          return std::max(
+            height_rec(curr->mutable_left(), height + 1ull),
+            height_rec(curr->mutable_right(), height + 1ull));
+        } else {
+          return height;
+        }
+      };
+
+    return height_rec(root_, 0ull);
+  }
+
   friend std::ostream &operator<<(std::ostream &out, const BST &obj)
   {
     if (not obj.root_) {
