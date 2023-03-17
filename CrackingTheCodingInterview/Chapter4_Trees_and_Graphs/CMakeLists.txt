@@ -30,3 +30,17 @@ add_executable(Q4.5_CrackingTheCodingInterview Q4.5.cxx)
 #       successor) of a given node in a binary search tree. You may assume
 #       that each node has a link to its parent.
 add_executable(Q4.6_CrackingTheCodingInterview Q4.6.cxx)
+
+# Q4.7: Build Order: You are given a list of projects and a list of
+#       dependencies (which is a list of pairs of projects where the
+#       second project is dependent on the first project). All of the project's
+#       dependencies must be built before the project is. Find a build order
+#       that will allow the projects to be built. If there is no valid build
+#       order, return an error.
+#
+#         Input:
+#           projects: a, b, c, d, e, f
+#           dependencies (a, d), (f, b), (b, d), (f, a), (d, c)
+#
+#         Output: f, e, a, b, d, c
+add_executable(Q4.7_CrackingTheCodingInterview Q4.7.cxx)
