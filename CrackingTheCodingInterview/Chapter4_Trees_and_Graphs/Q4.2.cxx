@@ -32,7 +32,8 @@ void insert_sorted(
     ConstIter_t mid_it = (begin_it + middle);
     std::cout << "\tmiddle = " << middle << " begin_it = " << (*begin_it) <<
       " mid_it = " << (*mid_it) << std::endl;
-    bst.insert(*mid_it);
+    bool inserted = false;
+    bst.insert(*mid_it, inserted);
 
     insert_sorted({sorted_vec.begin(), mid_it}, bst);
     insert_sorted({mid_it + 1, sorted_vec.end()}, bst);

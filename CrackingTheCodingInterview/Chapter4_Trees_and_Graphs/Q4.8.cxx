@@ -80,14 +80,14 @@ void build_tree_select_nodes(
   for (std::size_t i = 0; i < number_of_nodes; ++i) {
     double rand_double = dist(mt);
     const BST<double>::Node *ret = nullptr;
-    try {
-      ret = &bst.insert(rand_double);
-      if (i == random_select_node1) {
-        randos[0] = ret;
-      } else if (i == random_select_node2) {
-        randos[1] = ret;
-      }
-    } catch (std::runtime_error &ex) {
+    bool inserted = false;
+    ret = &bst.insert(rand_double, inserted);
+    if (i == random_select_node1) {
+      randos[0] = ret;
+    } else if (i == random_select_node2) {
+      randos[1] = ret;
+    }
+    if (not inserted) {
       --i; // This means we tried to insert a duplicate.
     }
   } 

@@ -50,3 +50,9 @@ add_executable(Q4.7_CrackingTheCodingInterview Q4.7.cxx)
 #       additional nodes in a data structure. NOTE: This is not necessarily
 #       a binary search tree.
 add_executable(Q4.8_CrackingTheCodingInterview Q4.8.cxx)
+
+# Q4.9: BST Sequence: A binary search tree was created by traversing through an
+#       array from left to right and inserting each element. Given a binary
+#       search tree with distinct elements, print all possible arrays that
+#       could have lead to this tree.
+add_executable(Q4.9_CrackingTheCodingInterview Q4.9.cxx)

@@ -136,18 +136,19 @@ public:
     return root_;
   }
 
-  const Node &insert(const T &val)
+  const Node &insert(const T &val, bool &inserted)
   {
     const Node *ret = nullptr;
 
     if (root_ == nullptr) {
       root_ = std::make_unique<Node>(val);
       ret = root_.get();
+      inserted = true;
     } else {
       typedef std::unique_ptr<Node> NodePtr_t;
       bool insert = false;
       std::function<void (NodePtr_t &, NodePtr_t &)> rec_insert =
-        [&val, this, &insert, &ret, &rec_insert]
+        [&val, this, &insert, &ret, &inserted, &rec_insert]
         (NodePtr_t &curr, NodePtr_t &child)
         {
           if (curr) {
@@ -156,15 +157,18 @@ public:
               if (insert) {
                 curr->set_left(std::move(child));
                 insert = false;
+                inserted = true;
               }
             } else if (val > curr->val()) {
               rec_insert(curr->mutable_right(), child);
               if (insert) {
                 curr->set_right(std::move(child));
                 insert = false;
+                inserted = true;
               }
             } else {
               insert = false;
+              inserted = false;
               ret = curr.get();
             }
           } else {
@@ -176,15 +180,49 @@ public:
       std::unique_ptr<Node> child = nullptr;
       rec_insert(root_, child);
     }
-    if (not ret) {
-      throw std::runtime_error("Failed to insert " + std::to_string(val));
-    }
     return *ret;
+  }
+
+  bool operator==(const BST &rhs) const
+  {
+    bool same = true;
+    typedef const std::unique_ptr<Node> & Node_t;
+    std::function<bool (Node_t, Node_t)> trav_rec =
+      [&rhs, this, &same, &trav_rec](Node_t &mine, Node_t &theirs)
+    {
+      if (mine && theirs && same) {
+        if (mine->val() == theirs->val()) {
+          same =
+            trav_rec(
+              mine->unmutable_left(),
+              theirs->unmutable_left()) &&
+            trav_rec(
+              mine->unmutable_right(),
+               theirs->unmutable_right());
+        } else {
+          same = false;
+        }
+      } else if ((not mine && theirs) || (mine && not theirs)) {
+        return false;
+      } else {
+        return true;
+      }
+      return same;
+    };
+
+    if (get_root() && rhs.get_root()) {
+      trav_rec(get_root(), rhs.get_root());
+    } else if (get_root() && not rhs.get_root()) {
+      same = false;
+    } else if (not get_root() && rhs.get_root()) {
+      same = false;
+    }
+    return same;
   }
 
   std::size_t height() const
   {
-    typedef std::unique_ptr<BST<T>::Node> BSTNode_t;
+    typedef std::unique_ptr<Node> BSTNode_t;
     std::function<std::size_t (const BSTNode_t &, std::size_t height)>
       height_rec = [&height_rec](
       const BSTNode_t &curr,

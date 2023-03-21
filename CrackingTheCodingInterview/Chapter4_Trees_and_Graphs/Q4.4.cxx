@@ -62,7 +62,8 @@ void build_tree(BST<double> &bst, std::size_t number_of_nodes)
   std::uniform_real_distribution<double> dist(
     0.0, static_cast<double>(number_of_nodes));
   for (std::size_t i = 0; i < number_of_nodes; ++i) {
-    bst.insert(dist(mt));
+    bool inserted = false;
+    bst.insert(dist(mt), inserted);
   }
 }
 
