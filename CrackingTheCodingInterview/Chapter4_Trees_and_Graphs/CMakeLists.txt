@@ -44,3 +44,9 @@ add_executable(Q4.6_CrackingTheCodingInterview Q4.6.cxx)
 #
 #         Output: f, e, a, b, d, c
 add_executable(Q4.7_CrackingTheCodingInterview Q4.7.cxx)
+
+# Q4.8: First Comman Ancestor: Design an algorithm and write code to find the
+#       first common ancestor of two nodes in a binary tree. Avoid storing
+#       additional nodes in a data structure. NOTE: This is not necessarily
+#       a binary search tree.
+add_executable(Q4.8_CrackingTheCodingInterview Q4.8.cxx)

@@ -4,6 +4,7 @@
 #include <cassert>
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 
 #include <uuid/uuid.h>
@@ -135,38 +136,50 @@ public:
     return root_;
   }
 
-  void insert(const T &val)
+  const Node &insert(const T &val)
   {
+    const Node *ret = nullptr;
+
     if (root_ == nullptr) {
       root_ = std::make_unique<Node>(val);
+      ret = root_.get();
     } else {
       typedef std::unique_ptr<Node> NodePtr_t;
       bool insert = false;
       std::function<void (NodePtr_t &, NodePtr_t &)> rec_insert =
-        [&val, this, &insert, &rec_insert](NodePtr_t &curr, NodePtr_t &child)
+        [&val, this, &insert, &ret, &rec_insert]
+        (NodePtr_t &curr, NodePtr_t &child)
         {
           if (curr) {
-            if (val <= curr->val()) {
+            if (val < curr->val()) {
               rec_insert(curr->mutable_left(), child);
               if (insert) {
                 curr->set_left(std::move(child));
                 insert = false;
               }
-            } else {
+            } else if (val > curr->val()) {
               rec_insert(curr->mutable_right(), child);
               if (insert) {
                 curr->set_right(std::move(child));
                 insert = false;
               }
+            } else {
+              insert = false;
+              ret = curr.get();
             }
           } else {
             child = std::make_unique<Node>(val);
+            ret = child.get();
             insert = true;
           }
         };
       std::unique_ptr<Node> child = nullptr;
       rec_insert(root_, child);
     }
+    if (not ret) {
+      throw std::runtime_error("Failed to insert " + std::to_string(val));
+    }
+    return *ret;
   }
 
   std::size_t height() const
@@ -214,6 +227,69 @@ public:
       rec_print(obj.root_, 0ull);
     }
     return out;
+  }
+
+  void get_path(
+    const Node &item,
+    std::vector<const Node *> &path) const
+  {
+    typedef std::unique_ptr<Node> NodePtr_t;
+    typedef std::vector<const Node *> Return_t;
+    std::function <void (const NodePtr_t &, const Node &, Return_t &)>
+      rec_path = [&rec_path](
+        const NodePtr_t &curr,
+        const Node &item,
+        Return_t &path)
+      {
+        // In this function we should not be assuming BST, we would
+        // essentially have to traverse the tree kind of like a graph.
+        if (curr) {
+          if (curr->val() < item.val()) {
+            path.push_back(curr.get());
+            rec_path(curr->unmutable_right(), item, path);
+          } else if (curr->val() > item.val()) {
+            path.push_back(curr.get());
+            rec_path(curr->unmutable_left(), item, path);
+          } else {
+            path.push_back(curr.get());
+          }
+        }
+      };
+
+
+    if (not get_root()) {
+      throw std::runtime_error("No common ancestor in empty tree.");
+    } else {
+      rec_path(get_root(), item, path);
+    }
+  }
+
+private:
+  bool find(const T &val, const Node *&ret) const
+  {
+    bool found = false;
+    std::function<void (const std::unique_ptr<BST<T>::Node> &)> rec_find =
+      [&val, &ret, &found, &rec_find]
+      (const std::unique_ptr<BST<T>::Node> &curr)
+      {
+        if (not found && curr) {
+          if (curr->val() == val) {
+            ret = curr.get();
+            found = true;
+          } else if (curr->val() > val) {
+            rec_find(curr->unmutable_left());
+          } else {
+            rec_find(curr->unmutable_right());
+          }
+        }
+      };
+    rec_find(get_root());
+
+    if (not ret) {
+      throw std::runtime_error("Failed to find " + std::to_string(val));
+    }
+
+    return found;
   }
 
 private:
