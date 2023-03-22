@@ -56,3 +56,8 @@ add_executable(Q4.8_CrackingTheCodingInterview Q4.8.cxx)
 #       search tree with distinct elements, print all possible arrays that
 #       could have lead to this tree.
 add_executable(Q4.9_CrackingTheCodingInterview Q4.9.cxx)
+
+# Q4.10: Check Subtree: T1 and T2 are two very large binary trees, with T1
+#        much bigger than T2. Create an algorithm to determine if T2 is a
+#        subtree of T1.
+add_executable(Q4.10_CrackingTheCodingInterview Q4.10.cxx)

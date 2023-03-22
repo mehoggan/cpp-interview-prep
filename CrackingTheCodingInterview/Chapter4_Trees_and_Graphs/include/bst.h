@@ -2,6 +2,7 @@
 #define CPP_INTERVIEW_PREP_CRACKINGTHECODINGINTERVIEW_CH_4_BST_H
 
 #include <cassert>
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -104,6 +105,27 @@ public:
       right_ = std::move(new_right);
     }
 
+    friend std::ostream &operator<<(std::ostream &out, const Node &obj)
+    {
+      std::function<void (const Node *, std::size_t depth)> print_rec =
+        [&out, &print_rec](const Node *curr, std::size_t depth)
+        {
+          if (curr) {
+            auto curr_str = std::string(*curr);
+            std::size_t curr_depth = 0;
+            while (curr_depth < depth) {
+              out << "\t";
+              ++curr_depth;
+            }
+            out << depth << ") " << curr_str << std::endl;
+            print_rec(curr->unmutable_left().get(), depth + 1);
+            print_rec(curr->unmutable_right().get(), depth + 1);
+          }
+        };
+      print_rec(&obj, 0ull);
+      return out;
+    }
+
   private:
     T val_;
     Type type_;
@@ -136,10 +158,12 @@ public:
     return root_;
   }
 
-  const Node &insert(const T &val, bool &inserted)
+  std::pair<std::size_t, const Node *> insert_with_depth(
+    const T &val,
+    bool &inserted)
   {
     const Node *ret = nullptr;
-
+    std::size_t ret_depth = 0ull;
     if (root_ == nullptr) {
       root_ = std::make_unique<Node>(val);
       ret = root_.get();
@@ -147,20 +171,20 @@ public:
     } else {
       typedef std::unique_ptr<Node> NodePtr_t;
       bool insert = false;
-      std::function<void (NodePtr_t &, NodePtr_t &)> rec_insert =
-        [&val, this, &insert, &ret, &inserted, &rec_insert]
-        (NodePtr_t &curr, NodePtr_t &child)
+      std::function<void (NodePtr_t &, NodePtr_t &, std::size_t)> rec_insert =
+        [&ret_depth, &val, this, &insert, &ret, &inserted, &rec_insert]
+        (NodePtr_t &curr, NodePtr_t &child, std::size_t depth)
         {
           if (curr) {
             if (val < curr->val()) {
-              rec_insert(curr->mutable_left(), child);
+              rec_insert(curr->mutable_left(), child, depth + 1);
               if (insert) {
                 curr->set_left(std::move(child));
                 insert = false;
                 inserted = true;
               }
             } else if (val > curr->val()) {
-              rec_insert(curr->mutable_right(), child);
+              rec_insert(curr->mutable_right(), child, depth + 1);
               if (insert) {
                 curr->set_right(std::move(child));
                 insert = false;
@@ -170,17 +194,25 @@ public:
               insert = false;
               inserted = false;
               ret = curr.get();
+              ret_depth = depth;
             }
           } else {
             child = std::make_unique<Node>(val);
             ret = child.get();
             insert = true;
+            ret_depth = depth;
           }
         };
       std::unique_ptr<Node> child = nullptr;
-      rec_insert(root_, child);
+      rec_insert(root_, child, 0ull);
     }
-    return *ret;
+
+    return {ret_depth, ret};
+  }
+
+  const Node &insert(const T &val, bool &inserted)
+  {
+    return (*(insert_with_depth(val, inserted)).second);
   }
 
   bool operator==(const BST &rhs) const
